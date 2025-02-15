@@ -1,8 +1,8 @@
 #include "displayapp/screens/WatchFaceMixed.h"
 #include <cmath>
 #include <cstdint>
-#include <limits>
 #include <lvgl/lvgl.h>
+#include "displayapp/Colors.h"
 #include "displayapp/screens/Symbols.h"
 #include "displayapp/screens/WeatherSymbols.h"
 #include "displayapp/screens/NotificationIcon.h"
@@ -10,7 +10,6 @@
 #include "components/motion/MotionController.h"
 #include "components/ble/SimpleWeatherService.h"
 #include "components/settings/Settings.h"
-#include "displayapp/InfiniTimeTheme.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -79,7 +78,7 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
   lv_obj_set_style_local_bg_opa(minor_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
   lv_obj_set_style_local_scale_width(minor_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, 4);
   lv_obj_set_style_local_scale_end_line_width(minor_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, 1);
-  lv_obj_set_style_local_scale_end_color(minor_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_GRAY);
+  lv_obj_set_style_local_scale_end_color(minor_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
 
   major_scales = lv_linemeter_create(lv_scr_act(), nullptr);
   lv_linemeter_set_scale(major_scales, 300, 11);
@@ -89,7 +88,7 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
   lv_obj_set_style_local_bg_opa(major_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
   lv_obj_set_style_local_scale_width(major_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, 6);
   lv_obj_set_style_local_scale_end_line_width(major_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, 4);
-  lv_obj_set_style_local_scale_end_color(major_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_SILVER);
+  lv_obj_set_style_local_scale_end_color(major_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Silver));
 
   large_scales = lv_linemeter_create(lv_scr_act(), nullptr);
   lv_linemeter_set_scale(large_scales, 180, 3);
@@ -99,13 +98,13 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
   lv_obj_set_style_local_bg_opa(large_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
   lv_obj_set_style_local_scale_width(large_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, 20);
   lv_obj_set_style_local_scale_end_line_width(large_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, 4);
-  lv_obj_set_style_local_scale_end_color(large_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xE5E5E2));
+  lv_obj_set_style_local_scale_end_color(large_scales, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Platinum));
 
   twelve = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_align(twelve, LV_LABEL_ALIGN_CENTER);
   lv_label_set_text_static(twelve, "12");
   lv_obj_set_pos(twelve, 110, 10);
-  lv_obj_set_style_local_text_color(twelve, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xFFD700));
+  lv_obj_set_style_local_text_color(twelve, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gold));
 
   // Hands
 
@@ -117,31 +116,31 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
 
   lv_style_init(&second_line_style);
   lv_style_set_line_width(&second_line_style, LV_STATE_DEFAULT, 3);
-  lv_style_set_line_color(&second_line_style, LV_STATE_DEFAULT, LV_COLOR_RED);
+  lv_style_set_line_color(&second_line_style, LV_STATE_DEFAULT, Colors::Color(Colors::Red));
   lv_style_set_line_rounded(&second_line_style, LV_STATE_DEFAULT, true);
   lv_obj_add_style(second_body, LV_LINE_PART_MAIN, &second_line_style);
 
   lv_style_init(&minute_line_style);
   lv_style_set_line_width(&minute_line_style, LV_STATE_DEFAULT, 7);
-  lv_style_set_line_color(&minute_line_style, LV_STATE_DEFAULT, lv_color_hex(0xB87333));
+  lv_style_set_line_color(&minute_line_style, LV_STATE_DEFAULT, Colors::Color(Colors::Copper));
   lv_style_set_line_rounded(&minute_line_style, LV_STATE_DEFAULT, true);
   lv_obj_add_style(minute_body, LV_LINE_PART_MAIN, &minute_line_style);
 
   lv_style_init(&minute_line_style_trace);
   lv_style_set_line_width(&minute_line_style_trace, LV_STATE_DEFAULT, 3);
-  lv_style_set_line_color(&minute_line_style_trace, LV_STATE_DEFAULT, lv_color_hex(0xB87333));
+  lv_style_set_line_color(&minute_line_style_trace, LV_STATE_DEFAULT, Colors::Color(Colors::Copper));
   lv_style_set_line_rounded(&minute_line_style_trace, LV_STATE_DEFAULT, false);
   lv_obj_add_style(minute_body_trace, LV_LINE_PART_MAIN, &minute_line_style_trace);
 
   lv_style_init(&hour_line_style);
   lv_style_set_line_width(&hour_line_style, LV_STATE_DEFAULT, 7);
-  lv_style_set_line_color(&hour_line_style, LV_STATE_DEFAULT, lv_color_hex(0xB87333));
+  lv_style_set_line_color(&hour_line_style, LV_STATE_DEFAULT, Colors::Color(Colors::Copper));
   lv_style_set_line_rounded(&hour_line_style, LV_STATE_DEFAULT, true);
   lv_obj_add_style(hour_body, LV_LINE_PART_MAIN, &hour_line_style);
 
   lv_style_init(&hour_line_style_trace);
   lv_style_set_line_width(&hour_line_style_trace, LV_STATE_DEFAULT, 3);
-  lv_style_set_line_color(&hour_line_style_trace, LV_STATE_DEFAULT, lv_color_hex(0xB87333));
+  lv_style_set_line_color(&hour_line_style_trace, LV_STATE_DEFAULT, Colors::Color(Colors::Copper));
   lv_style_set_line_rounded(&hour_line_style_trace, LV_STATE_DEFAULT, false);
   lv_obj_add_style(hour_body_trace, LV_LINE_PART_MAIN, &hour_line_style_trace);
 
@@ -154,7 +153,7 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
 
   label_time_ampm = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_text_static(label_time_ampm, "");
-  lv_obj_set_style_local_text_color(label_time_ampm, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_obj_set_style_local_text_color(label_time_ampm, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
   lv_obj_align(label_time_ampm, lv_scr_act(), LV_ALIGN_IN_TOP_RIGHT, -30, 30);
   lv_label_set_align(label_time_ampm, LV_LABEL_ALIGN_RIGHT);
 
@@ -165,21 +164,21 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
   // Notification
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_LIME);
+  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Lime));
   lv_label_set_text_static(notificationIcon, NotificationIcon::GetIcon(false));
   lv_obj_align(notificationIcon, lv_scr_act(), LV_ALIGN_IN_TOP_LEFT, 0, 0);
 
   // Weather
 
   weatherIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
   lv_obj_set_style_local_text_font(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &fontawesome_weathericons);
   lv_label_set_text(weatherIcon, "");
   lv_obj_align(weatherIcon, lv_scr_act(), LV_ALIGN_CENTER, -23, 50);
   lv_obj_set_auto_realign(weatherIcon, true);
 
   temperature = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
   lv_label_set_text(temperature, "");
   lv_obj_align(temperature, lv_scr_act(), LV_ALIGN_CENTER, 22, 50);
 
@@ -187,23 +186,23 @@ WatchFaceMixed::WatchFaceMixed(Controllers::DateTime& dateTimeController,
 
   heartbeatIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_text_static(heartbeatIcon, Symbols::heartBeat);
-  lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xCE1B1B));
+  lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Red));
   lv_obj_align(heartbeatIcon, lv_scr_act(), LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
 
   heartbeatValue = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(heartbeatValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xCE1B1B));
+  lv_obj_set_style_local_text_color(heartbeatValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Red));
   lv_label_set_text_static(heartbeatValue, "");
   lv_obj_align(heartbeatValue, heartbeatIcon, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
 
   // Steps
 
   stepValue = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x00FFE7));
+  lv_obj_set_style_local_text_color(stepValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Cyan));
   lv_label_set_text_static(stepValue, "0");
   lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
 
   stepIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(stepIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x00FFE7));
+  lv_obj_set_style_local_text_color(stepIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Cyan));
   lv_label_set_text_static(stepIcon, Symbols::shoe);
   lv_obj_align(stepIcon, stepValue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
@@ -309,10 +308,10 @@ void WatchFaceMixed::UpdateDate() {
 
 void WatchFaceMixed::UpdateHeartbeat() {
   if (heartbeatRunning.Get()) {
-    lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xCE1B1B));
+    lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Red));
     lv_label_set_text_fmt(heartbeatValue, "%d", heartbeat.Get());
   } else {
-    lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x1B1B1B));
+    lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::DarkGray));
     lv_label_set_text_static(heartbeatValue, "");
   }
 
@@ -326,43 +325,43 @@ void WatchFaceMixed::UpdateSteps() {
   lv_obj_realign(stepIcon);
 }
 
-uint32_t linear_color_gradient(uint32_t startingColor, uint32_t endingColor, uint8_t progress){
-  constexpr decltype(progress) maxProgress = std::numeric_limits<decltype(progress)>::max();
-  uint32_t res = 0;
-  res += ((maxProgress-progress)*((startingColor&0xff0000) >> 16) + progress*((endingColor&0xff0000) >> 16)) / maxProgress;
-  res <<= 8;
-  res += ((maxProgress - progress) * ((startingColor&0x00ff00) >> 8) + progress * ((endingColor&0x00ff00) >> 8)) / maxProgress;
-  res <<= 8;
-  res += ((maxProgress - progress) * (startingColor&0x0000ff) + progress * (endingColor&0x0000ff)) / maxProgress;
-
-  return res;
-}
-
 void WatchFaceMixed::UpdateWeather() {
   auto optCurrentWeather = currentWeather.Get();
   if (optCurrentWeather) {
     int16_t temp = optCurrentWeather->temperature.Celsius();
     char tempUnit = 'C';
 
-    enum TempColor : uint32_t {
-      VeryCold = 0x6495ed,
-      Freezing = 0x00ffff,
-      Cold = 0x808080,
-      Hot = 0xfafd0f,
-      VeryHot = 0xff0000
-    };
+    enum TemperatureColor : uint32_t { VeryCold = 0x6495ed, Freezing = 0x00ffff, Cold = 0x808080, Hot = 0xfafd0f, VeryHot = 0xff0000 };
+
     if(temp < -30) {
-      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(TempColor::VeryCold));
+      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(TemperatureColor::VeryCold));
     } else if(-30 <= temp && temp < 0) {
-      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(linear_color_gradient(TempColor::VeryCold, TempColor::Freezing, 255*(temp+30)/30)));
+      lv_obj_set_style_local_text_color(temperature,
+                                        LV_LABEL_PART_MAIN,
+                                        LV_STATE_DEFAULT,
+                                        Colors::linear_gradient(Colors::Color(TemperatureColor::VeryCold),
+                                                                Colors::Color(TemperatureColor::Freezing),
+                                                                255 * (temp + 30) / 30));
     } else if(0 <= temp && temp < 10) {
-      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(linear_color_gradient(TempColor::Freezing, TempColor::Cold, 255*temp/10)));
+      lv_obj_set_style_local_text_color(
+        temperature,
+        LV_LABEL_PART_MAIN,
+        LV_STATE_DEFAULT,
+        Colors::linear_gradient(Colors::Color(TemperatureColor::Freezing), Colors::Color(TemperatureColor::Cold), 255 * temp / 10));
     } else if(10 <= temp && temp < 18) {
-      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(linear_color_gradient(TempColor::Cold, TempColor::Hot, 255*(temp-10)/8)));
+      lv_obj_set_style_local_text_color(
+        temperature,
+        LV_LABEL_PART_MAIN,
+        LV_STATE_DEFAULT,
+        Colors::linear_gradient(Colors::Color(TemperatureColor::Cold), Colors::Color(TemperatureColor::Hot), 255 * (temp - 10) / 8));
     } else if(18 <= temp && temp < 50) {
-      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(linear_color_gradient(TempColor::Hot, TempColor::VeryHot, 255*(temp-18)/32)));
+      lv_obj_set_style_local_text_color(
+        temperature,
+        LV_LABEL_PART_MAIN,
+        LV_STATE_DEFAULT,
+        Colors::linear_gradient(Colors::Color(TemperatureColor::Hot), Colors::Color(TemperatureColor::VeryHot), 255 * (temp - 18) / 32));
     } else if(temp >= 50) {
-      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(TempColor::VeryHot));
+      lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(TemperatureColor::VeryHot));
     }
     if (settingsController.GetWeatherFormat() == Controllers::Settings::WeatherFormat::Imperial) {
       temp = optCurrentWeather->temperature.Fahrenheit();
@@ -372,43 +371,55 @@ void WatchFaceMixed::UpdateWeather() {
 
     lv_label_set_text(weatherIcon, Symbols::GetSymbol(optCurrentWeather->iconId));
     using Icons = Pinetime::Controllers::SimpleWeatherService::Icons;
+
+    enum WeatherColor : uint32_t {
+      Sunny = 0xFAFD0F,
+      Covered = 0xC4C745,
+      Cloudy = 0xCBD0D2,
+      VeryCloudy = 0x7E8796,
+      HeavyRain = 0x000080,
+      Rainny = 0xBFDDEA,
+      Stormy = 0xC4893D,
+      Snowy = 0xFFFFFF,
+      Smoggy = 0x697379
+    };
     switch(optCurrentWeather->iconId){
       case Icons::Sun:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xfafd0f));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Sunny));
         break;
       case Icons::CloudsSun:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xc4c745));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Covered));
         break;
       case Icons::Clouds:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xcbd0d2));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Cloudy));
         break;
       case Icons::BrokenClouds:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x7e8796));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::VeryCloudy));
         break;
       case Icons::CloudShowerHeavy:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000080));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::HeavyRain));
         break;
       case Icons::CloudSunRain:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xbfddea));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Rainny));
         break;
       case Icons::Thunderstorm:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xC4893D));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Stormy));
         break;
       case Icons::Snow:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xffffff));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Snowy));
         break;
       case Icons::Smog:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x697379));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(WeatherColor::Smoggy));
         break;
       default:
-        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+        lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
         break;
     }
   } else {
     lv_label_set_text_static(temperature, "");
-    lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+    lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
     lv_label_set_text(weatherIcon, "");
-    lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+    lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::Color(Colors::Gray));
   }
   lv_obj_realign(temperature);
   lv_obj_realign(weatherIcon);
